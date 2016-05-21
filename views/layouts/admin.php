@@ -8,6 +8,8 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use mdm\admin\components\Helper;
+
 
 AppAsset::register($this);
 ?>
@@ -26,19 +28,10 @@ AppAsset::register($this);
 
 <div class="wrap">
     <?php
-    NavBar::begin([
-        'brandLabel' => 'My Company',
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
-        ],
-    ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
+$menuItems = [
             ['label' => 'Главная', 'url' => ['/admin/default/index']],
             ['label' => 'Посты', 'url' => ['/admin/post/index']],
-            // ['label' => 'Contact', 'url' => ['/site/contact']],
+            ['label' => 'Пользователи', 'url' => ['/rbac/default/index']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Войти', 'url' => ['/site/login']]
             ) : (
@@ -51,7 +44,18 @@ AppAsset::register($this);
                 . Html::endForm()
                 . '</li>'
             )
+        ];
+
+    NavBar::begin([
+        'brandLabel' => 'My Company',
+        'brandUrl' => Yii::$app->homeUrl,
+        'options' => [
+            'class' => 'navbar-inverse navbar-fixed-top',
         ],
+    ]);
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav navbar-right'],
+        'items' =>  Helper::filter($menuItems),
     ]);
     NavBar::end();
     ?>
